@@ -1,6 +1,11 @@
 {
-  "scripts":{
-    "start":"nodemon app"
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "type":"module",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -11,5 +16,8 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.14"
-  }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
