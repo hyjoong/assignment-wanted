@@ -55,6 +55,22 @@ router.post("/", (req, res, next) => {
   res.status(201).json(board);
 });
 
+// PUT    /boards/:id
+router.put("/:id", (req, res, next) => {
+  const id = req.params.id;
+  const text = req.body.text;
+  const board = boards.find((board) => board.id === id);
+  if (board) {
+    // 게시글이 있다면 update
+    board.text = text;
+    res.status(200).json(board);
+  } else {
+    res
+      .status(404)
+      .josn({ message: `id가 ${id}인 게시글을 찾지 못 하였습니다. ` });
+  }
+});
+
 // DELETE  /boards/:id
 router.delete("/:id", (req, res, next) => {
   const id = req.params.id;
