@@ -1,7 +1,7 @@
 import express from "express";
 import "express-async-errors";
 
-const boards = [
+let boards = [
   {
     id: "0",
     text: "Test ",
@@ -41,6 +41,18 @@ router.get("/:id", (req, res, next) => {
       .status(404)
       .josn({ message: `id가 ${id}인 게시글을 찾지 못 하였습니다. ` });
   }
+});
+
+// POST
+router.post("/", (req, res, next) => {
+  const { text, name } = req.body;
+  const board = {
+    id: Date.now().toString(),
+    text,
+    name,
+  };
+  boards = [board, ...boards];
+  res.status(201).json(board);
 });
 
 export default router;
