@@ -1,16 +1,16 @@
 import * as boardRepository from "../data/board.js";
 
-export const getBoards = (req, res) => {
+export const getBoards = async (req, res) => {
   const name = req.query.name;
-  const data = name
+  const data = await (name
     ? boardRepository.getAllByName(name)
-    : boardRepository.getAll();
+    : boardRepository.getAll());
   res.status(200).json(data);
 };
 
-export const getBoard = (req, res, next) => {
+export const getBoard = async (req, res, next) => {
   const id = req.params.id;
-  const board = boardRepository.getAll(id);
+  const board = await boardRepository.getAll(id);
   if (board) {
     res.status(200).json(board);
   } else {
@@ -20,16 +20,16 @@ export const getBoard = (req, res, next) => {
   }
 };
 
-export const createBoard = (req, res, next) => {
+export const createBoard = async (req, res, next) => {
   const { text, name } = req.body;
-  const board = boardRepository.create(text, name);
+  const board = await boardRepository.create(text, name);
   res.status(201).json(board);
 };
 
-export const updateBoard = (req, res, next) => {
+export const updateBoard = async (req, res, next) => {
   const id = req.params.id;
   const text = req.body.text;
-  const board = boardRepository.update(id, text);
+  const board = await boardRepository.update(id, text);
   if (board) {
     res.status(200).json(board);
   } else {
@@ -39,8 +39,8 @@ export const updateBoard = (req, res, next) => {
   }
 };
 
-export const deleteBoard = (req, res, next) => {
+export const deleteBoard = async (req, res, next) => {
   const id = req.params.id;
-  boardRepository.remove(id);
+  await boardRepository.remove(id);
   res.sendStatus(204);
 };
