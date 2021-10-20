@@ -32,7 +32,7 @@
   - 예) sqlite3
 - Unit Test 구현시 가산점이 있습니다.
 
-#### API
+#### Rest API 
 
 Board
 

@@ -1,23 +1,6 @@
 import express from "express";
 import "express-async-errors";
-
-let boards = [
-  {
-    id: "0",
-    text: "Test ",
-    name: "hyun",
-  },
-  {
-    id: "1",
-    text: "Test2 ",
-    name: "hyun2",
-  },
-  {
-    id: "2",
-    text: "Test3 ",
-    name: "hyun3",
-  },
-];
+import * as boardRepository from "../data/board.js";
 
 const router = express.Router();
 
@@ -26,14 +9,16 @@ const router = express.Router();
 // GET /boards & /boards?name=:name
 router.get("/", (req, res, next) => {
   const name = req.query.name;
-  const data = name ? boards.filter((board) => board.name === name) : boards;
+  const data = name
+    ? boardRepository.getAllByName(name)
+    : boardRepository.getAll();
   res.status(200).json(data);
 });
 
 // /boards/:id
 router.get("/:id", (req, res, next) => {
   const id = req.params.id;
-  const board = boards.filter((board) => board.id === id);
+  const board = boardRepository.getAll(id);
   if (board) {
     res.status(200).json(board);
   } else {
@@ -46,11 +31,7 @@ router.get("/:id", (req, res, next) => {
 // POST
 router.post("/", (req, res, next) => {
   const { text, name } = req.body;
-  const board = {
-    id: Date.now().toString(),
-    text,
-    name,
-  };
+  const board = boardRepository.create(text, name);
   boards = [board, ...boards];
   res.status(201).json(board);
 });
@@ -59,10 +40,8 @@ router.post("/", (req, res, next) => {
 router.put("/:id", (req, res, next) => {
   const id = req.params.id;
   const text = req.body.text;
-  const board = boards.find((board) => board.id === id);
+  const board = boardRepository.update(id, text);
   if (board) {
-    // 게시글이 있다면 update
-    board.text = text;
     res.status(200).json(board);
   } else {
     res
@@ -74,7 +53,7 @@ router.put("/:id", (req, res, next) => {
 // DELETE  /boards/:id
 router.delete("/:id", (req, res, next) => {
   const id = req.params.id;
-  boards = boards.filter((board) => board.id !== id);
+  boardRepository.remove(id);
   res.sendStatus(204);
 });
 
