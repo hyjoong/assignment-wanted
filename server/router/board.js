@@ -55,4 +55,11 @@ router.post("/", (req, res, next) => {
   res.status(201).json(board);
 });
 
+// DELETE  /boards/:id
+router.delete("/:id", (req, res, next) => {
+  const id = req.params.id;
+  boards = boards.filter((board) => board.id !== id);
+  res.sendStatus(204);
+});
+
 export default router;
