@@ -4,6 +4,7 @@ import morgan from "morgan";
 import helmet from "helmet";
 import boardsRouter from "./router/board.js";
 import "express-async-errors";
+import { sequelize } from "./db/database.js";
 
 const app = express();
 

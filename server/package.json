@@ -2,17 +2,20 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "type":"module",
+  "type": "module",
   "main": "app.js",
   "scripts": {
     "start": "nodemon app"
   },
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "helmet": "^4.6.0",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "mysql2": "^2.3.2",
+    "sequelize": "^6.7.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.14"
