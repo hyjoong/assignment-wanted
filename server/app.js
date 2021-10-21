@@ -2,12 +2,14 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
-import boardsRouter from "./router/board.js";
 import "express-async-errors";
-import { sequelize } from "./db/database.js";
+// import { sequelize } from "./db/database.js";
+import boardsRouter from "./router/board.js";
+import authRouter from "./router/auth.js";
+import dotenv from "dotenv";
 
 const app = express();
-
+console.log(process.env);
 app.use(express.json());
 app.use(helmet());
 app.use(cors());
