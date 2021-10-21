@@ -2,13 +2,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import {} from "express-async-errors";
 import * as userRepository from "../data/auth.js";
-import dotenv from "dotenv";
-
-dotenv.config();
-
-const jwtSecretKey = procee.env.JWT_SECRET;
-const jwtExpiresInDays = "2d";
-const bcryptSaltRounds = 12;
+import { config } from "../config.js";
 
 export async function signup(req, res) {
   const { password, name } = req.body;
@@ -20,7 +14,6 @@ export async function signup(req, res) {
   const userId = await userRepository.createUser({
     password: hashed,
     name,
-    email,
   });
   const token = createJwtToken(userId);
   res.status(201).json({ token, name });
@@ -41,7 +34,9 @@ export async function login(req, res) {
 }
 
 function createJwtToken(id) {
-  return jwt.sign({ id }, jwtSecretKey, { expiresIn: jwtExpiresInDays });
+  return jwt.sign({ id }, config.jwt.secretKey, {
+    expiresIn: config.jwt.expiresInSec,
+  });
 }
 
 export async function me(req, res, next) {

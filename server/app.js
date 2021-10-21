@@ -6,16 +6,16 @@ import "express-async-errors";
 // import { sequelize } from "./db/database.js";
 import boardsRouter from "./router/board.js";
 import authRouter from "./router/auth.js";
-import dotenv from "dotenv";
 
 const app = express();
-console.log(process.env);
+
 app.use(express.json());
 app.use(helmet());
 app.use(cors());
 app.use(morgan("tiny"));
 
 app.use("/boards", boardsRouter);
+app.use("/auth", authRouter);
 
 app.use((req, res, next) => {
   res.sendStatus(404);
