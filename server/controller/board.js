@@ -14,33 +14,39 @@ export const getBoard = async (req, res, next) => {
   if (board) {
     res.status(200).json(board);
   } else {
-    res
-      .status(404)
-      .josn({ message: `id가 ${id}인 게시글을 찾지 못 하였습니다. ` });
+    res.status(404).josn({ message: `Board ${id}id(${id}) not found ` });
   }
 };
 
 export const createBoard = async (req, res, next) => {
-  const { text, name } = req.body;
-  const board = await boardRepository.create(text, name);
+  const { text } = req.body;
+  const board = await boardRepository.create(text, req.userId);
   res.status(201).json(board);
 };
 
 export const updateBoard = async (req, res, next) => {
   const id = req.params.id;
   const text = req.body.text;
-  const board = await boardRepository.update(id, text);
-  if (board) {
-    res.status(200).json(board);
-  } else {
-    res
-      .status(404)
-      .josn({ message: `id가 ${id}인 게시글을 찾지 못 하였습니다. ` });
+  const board = await boardRepository.getAllById(id);
+  if (!board) {
+    return res.status(404).json({ message: `Board not found: ${id}` });
   }
+  if (board.userId !== req.userId) {
+    return res.sendStatus(403);
+  }
+  const updated = await boardRepository.update(id, text);
+  res.status(200).json(updated);
 };
 
 export const deleteBoard = async (req, res, next) => {
   const id = req.params.id;
+  const board = await boardRepository.getAllById(id);
+  if (!board) {
+    return res.status(404).json({ message: `Board not found: ${id}` });
+  }
+  if (board.userId !== req.userId) {
+    return res.sendStatus(403);
+  }
   await boardRepository.remove(id);
   res.sendStatus(204);
 };

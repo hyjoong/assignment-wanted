@@ -1,54 +1,43 @@
-let boards = [
-  {
-    id: "0",
-    text: "Test ",
-    name: "hyun",
-    createdAt: new Date().toString(),
-  },
-  {
-    id: "1",
-    text: "Test2sss ",
-    name: "hyun2sz",
-    createdAt: new Date().toString(),
-  },
-  {
-    id: "2",
-    text: "Test3 ",
-    name: "hyun3",
-    createdAt: new Date().toString(),
-  },
-];
+import { db } from "../db/database.js";
 
-export const getAllByName = async (name) => {
-  return boards.filter((board) => board.name === name);
-};
+const SELECT_JOIN =
+  "SELECT board.id, board.text, board.createdAt, board.userId, users.name FROM board JOIN users ON board.userId=users.id ";
+const ORDER_DESC = "ORDER BY board.createdAt DESC";
 
 export const getAll = async () => {
-  return boards;
+  return db
+    .execute(`${SELECT_JOIN} ${ORDER_DESC}`) //
+    .then((result) => result[0]);
+};
+
+export const getAllByName = async (name) => {
+  return db
+    .execute(`${SELECT_JOIN} WHERE name=? ${ORDER_DESC}`, [name]) //
+    .then((result) => result[0]);
 };
 
 export const getAllById = async (id) => {
-  return boards.find((board) => board.id === id);
+  return db
+    .execute(`${SELECT_JOIN} WHERE board.id=?`, [id]) //
+    .then((result) => result[0][0]);
 };
 
-export const create = async (text, name) => {
-  const board = {
-    id: Date.now().toString(),
-    text,
-    name,
-  };
-  boards = [board, ...boards];
-  return board;
+export const create = async (text, userId) => {
+  return db
+    .execute("INSERT INTO board (text,createdAt,userId) VALUES(?,?,?)", [
+      text,
+      new Date(),
+      userId,
+    ])
+    .then((result) => result[0].insertId);
 };
 
 export const update = async (id, text) => {
-  const board = boards.find((board) => board.id === id);
-  if (board) {
-    board.text = text;
-  }
-  return board;
+  return db
+    .execute("UPDATE board SET text=? WHERE id=?", [text, id])
+    .then(() => getAllById(id));
 };
 
 export const remove = async (id) => {
-  boards = boards.filter((board) => board.id !== id);
+  return db.execute("DELETE FROM board WHERE id=?", [id]);
 };
