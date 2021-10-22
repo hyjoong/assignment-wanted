@@ -10,7 +10,7 @@ export const getBoards = async (req, res) => {
 
 export const getBoard = async (req, res, next) => {
   const id = req.params.id;
-  const board = await boardRepository.getAll(id);
+  const board = await boardRepository.getById(id);
   if (board) {
     res.status(200).json(board);
   } else {
@@ -27,7 +27,7 @@ export const createBoard = async (req, res, next) => {
 export const updateBoard = async (req, res, next) => {
   const id = req.params.id;
   const text = req.body.text;
-  const board = await boardRepository.getAllById(id);
+  const board = await boardRepository.getById(id);
   if (!board) {
     return res.status(404).json({ message: `Board not found: ${id}` });
   }
@@ -40,7 +40,7 @@ export const updateBoard = async (req, res, next) => {
 
 export const deleteBoard = async (req, res, next) => {
   const id = req.params.id;
-  const board = await boardRepository.getAllById(id);
+  const board = await boardRepository.getById(id);
   if (!board) {
     return res.status(404).json({ message: `Board not found: ${id}` });
   }
