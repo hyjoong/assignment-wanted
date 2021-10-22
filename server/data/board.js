@@ -3,16 +3,19 @@ let boards = [
     id: "0",
     text: "Test ",
     name: "hyun",
+    createdAt: new Date().toString(),
   },
   {
     id: "1",
     text: "Test2sss ",
     name: "hyun2sz",
+    createdAt: new Date().toString(),
   },
   {
     id: "2",
     text: "Test3 ",
     name: "hyun3",
+    createdAt: new Date().toString(),
   },
 ];
 
@@ -28,7 +31,7 @@ export const getAllById = async (id) => {
   return boards.find((board) => board.id === id);
 };
 
-export const create = async(text, name) => {
+export const create = async (text, name) => {
   const board = {
     id: Date.now().toString(),
     text,
@@ -38,7 +41,7 @@ export const create = async(text, name) => {
   return board;
 };
 
-export const update =async (id, text) => {
+export const update = async (id, text) => {
   const board = boards.find((board) => board.id === id);
   if (board) {
     board.text = text;
@@ -46,6 +49,6 @@ export const update =async (id, text) => {
   return board;
 };
 
-export const remove =async (id) => {
+export const remove = async (id) => {
   boards = boards.filter((board) => board.id !== id);
 };

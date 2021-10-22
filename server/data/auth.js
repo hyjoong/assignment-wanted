@@ -3,8 +3,12 @@ let users = [
     id: "1",
     name: "ssssss",
     password: "123456",
+    email: "hyjoong12@naver.com",
   },
 ];
+export async function findByEmail(email) {
+  return users.find((user) => user.email === email);
+}
 
 export async function findByName(name) {
   return users.find((user) => user.name === name);

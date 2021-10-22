@@ -5,32 +5,33 @@ import * as userRepository from "../data/auth.js";
 import { config } from "../config.js";
 
 export async function signup(req, res) {
-  const { password, name } = req.body;
+  const { password, name, email } = req.body;
   const found = await userRepository.findByName(name);
   if (found) {
     return res.status(409).json({ message: `${name} already exists` });
   }
-  const hashed = await bcrypt.hash(password, bcryptSaltRounds);
+  const hashed = await bcrypt.hash(password, config.bcrypt.saltRounds);
   const userId = await userRepository.createUser({
     password: hashed,
     name,
+    email,
   });
   const token = createJwtToken(userId);
-  res.status(201).json({ token, name });
+  res.status(201).json({ token, email });
 }
 
 export async function login(req, res) {
-  const { name, password } = req.body;
-  const user = await userRepository.findByName(name);
+  const { email, password } = req.body;
+  const user = await userRepository.findByEmail(email);
   if (!user) {
-    return res.status(401).json({ message: "Invalid user or password" });
+    return res.status(401).json({ message: "Invalid email or password" });
   }
   const isValidPassword = await bcrypt.compare(password, user.password);
   if (!isValidPassword) {
     return res.status(401).json({ message: "Invalid user or password" });
   }
   const token = createJwtToken(user.id);
-  res.status(200).json({ token, name });
+  res.status(200).json({ token, email });
 }
 
 function createJwtToken(id) {

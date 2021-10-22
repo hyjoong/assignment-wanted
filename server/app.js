@@ -6,7 +6,10 @@ import "express-async-errors";
 // import { sequelize } from "./db/database.js";
 import boardsRouter from "./router/board.js";
 import authRouter from "./router/auth.js";
+import dotenv from "dotenv";
+import { config } from "./config.js";
 
+dotenv.config();
 const app = express();
 
 app.use(express.json());
@@ -26,4 +29,4 @@ app.use((error, req, res, next) => {
   res.sendStatus(500);
 });
 
-app.listen(8080);
+app.listen(config.host.port);
