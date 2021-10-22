@@ -1,25 +1,26 @@
-let users = [
-  {
-    id: "1",
-    name: "ssssss",
-    password: "123456",
-    email: "hyjoong12@naver.com",
-  },
-];
-export async function findByEmail(email) {
-  return users.find((user) => user.email === email);
-}
+import { db } from "../db/database.js";
 
-export async function findByName(name) {
-  return users.find((user) => user.name === name);
+export async function findByEmail(email) {
+  return db
+    .execute("SELECT * FROM users WHERE email=?", [email])
+    .then((result) => result[0][0]);
 }
 
 export async function findById(id) {
-  return users.find((user) => user.id === id);
+  return db
+    .execute("SELECT * FROM users WHERE id=?", [id]) //
+    .then((result) => result[0][0]);
 }
 
 export async function createUser(user) {
-  const created = { ...user, id: Date.now().toString() };
-  users.push(created);
-  return created.id;
+  const { name, email, password } = user;
+  return db
+    .execute("INSERT INTO users (name,email,password) VALUES (?,?,?)", [
+      name,
+      email,
+      password,
+    ])
+    .then((res) => {
+      res[0].insertId;
+    });
 }
